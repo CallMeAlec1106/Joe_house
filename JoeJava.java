@@ -1,3 +1,5 @@
-public static void main(){
-
+public class JoeJava{
+  public static void main(String[] args){
+    
+  }
 }

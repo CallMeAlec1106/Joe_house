@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.engineering.bookpurchase.admin.mapper.BookAdminMapper">
+  <resultMap id="BaseResultMap" type="com.engineering.bookpurchase.admin.pojo.BookAdmin">
+    <id column="adminID" jdbcType="INTEGER" property="adminid" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    adminID, username, password
+  </sql>
+
+  <select id="selectByExample" parameterType="com.engineering.bookpurchase.admin.pojo.BookAdminExample" resultMap="BaseResultMap">
+    select * from book_admin limit #{limit},#{page}
+  </select>
+
+  <select id="selectAdminCount" resultType="java.lang.Integer">
+    select count(*) from book_admin
+  </select>
+
+  <select id="selectByExample2" parameterType="com.engineering.bookpurchase.admin.pojo.BookAdmin" resultMap="BaseResultMap">
+    select * from book_admin
+  </select>
+
+  <select id="loginAdmin" parameterType="String" resultType="com.engineering.bookpurchase.admin.pojo.BookAdmin">
+    select * from book_admin
+    WHERE
+        username = '${username}'
+    AND password = '${password}'
+  </select>
+
+  <insert id="addAdmin" parameterType="String">
+    insert into book_admin(username,password)
+    values
+    ('${username}','${password}')
+  </insert>
+
+  <select id="selectByPrimaryKey" parameterType="Integer" resultType="com.engineering.bookpurchase.admin.pojo.BookAdmin">
+    select * from book_admin
+    where
+      adminID=${adminID}
+  </select>
+
+  <update id="updateBookAdmin" parameterType="map">
+    update book_admin
+    set
+    password=#{bookAdmin.password,jdbcType=VARCHAR}
+    where
+    adminId=${bookAdmin.adminID}
+  </update>
+
+  <delete id="deleteAdmin" parameterType="Integer">
+    delete from book_admin
+    where
+    adminID = ${adminID}
+  </delete>
+
+  <select id="searchByAdmin" parameterType="String" resultType="com.engineering.bookpurchase.admin.pojo.BookAdmin">
+    select * from book_admin
+    where
+    username like CONCAT(CONCAT('%', #{username}), '%');
+  </select>
+
+</mapper>

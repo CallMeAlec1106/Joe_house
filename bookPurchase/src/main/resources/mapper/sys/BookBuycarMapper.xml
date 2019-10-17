@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.engineering.bookpurchase.buycar.mapper.BookBuycarMapper" >
+  <resultMap id="BaseResultMap" type="com.engineering.bookpurchase.buycar.pojo.BookBuycar" >
+    <id column="buycar_id" property="buycarId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="book_detail_id" property="bookDetailId" jdbcType="INTEGER" />
+    <result column="order_quantity" property="orderQuantity" jdbcType="VARCHAR" />
+    <result column="total_price" property="totalPrice" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="VARCHAR" />
+    <result column="updata_date" property="updataDate" jdbcType="VARCHAR" />
+    <result column="remarks" property="remarks" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <association property="bookUser" javaType="com.engineering.bookpurchase.user.pojo.BookUser">
+      <id column="consumerid" jdbcType="INTEGER" property="consumerid" />
+      <result column="truename" jdbcType="VARCHAR" property="truename" />
+      <result column="username" jdbcType="VARCHAR" property="username" />
+      <result column="password" jdbcType="VARCHAR" property="password" />
+      <result column="sex" jdbcType="VARCHAR" property="sex" />
+      <result column="birthday" jdbcType="VARCHAR" property="birthday" />
+      <result column="address" jdbcType="VARCHAR" property="address" />
+      <result column="email" jdbcType="VARCHAR" property="email" />
+      <result column="phone" jdbcType="VARCHAR" property="phone" />
+    </association>
+    <association property="bookDetail" javaType="com.engineering.bookpurchase.detail.pojo.BookDetail">
+      <id column="bookID" property="bookid" jdbcType="INTEGER" />
+      <result column="bookName" property="bookname" jdbcType="VARCHAR" />
+      <result column="author" property="author" jdbcType="VARCHAR" />
+      <result column="content" property="content" jdbcType="VARCHAR" />
+      <result column="price" property="price" jdbcType="VARCHAR" />
+      <result column="discount" property="discount" jdbcType="VARCHAR" />
+      <result column="bookTypeID" property="booktypeid" jdbcType="VARCHAR" />
+      <result column="book_upload_id" property="bookuploadid" jdbcType="VARCHAR" />
+    </association>
+    <association property="bookUpload" javaType="com.engineering.bookpurchase.common.pojo.BookUpload">
+      <id column="id" property="id" jdbcType="INTEGER" />
+      <result column="original_filename" property="originalFilename" jdbcType="VARCHAR" />
+      <result column="original_name" property="originalName" jdbcType="VARCHAR" />
+      <result column="prefix" property="prefix" jdbcType="VARCHAR" />
+      <result column="rename_filename" property="renameFilename" jdbcType="VARCHAR" />
+      <result column="rename_name" property="renameName" jdbcType="VARCHAR" />
+      <result column="file_path" property="filePath" jdbcType="VARCHAR" />
+      <result column="create_data" property="createData" jdbcType="VARCHAR" />
+      <result column="update_data" property="updateData" jdbcType="VARCHAR" />
+      <result column="remarks" property="remarks" jdbcType="VARCHAR" />
+      <result column="relative_path" property="relativePath" jdbcType="VARCHAR" />
+    </association>
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    buycar_id, user_id, book_detail_id, order_quantity, total_price, create_date, updata_date, 
+    remarks, status
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select *
+    from book_buycar as buycar,book_detail as detail,book_upload as upload
+    where buycar.user_id = ${userId} and buycar.status='1' and detail.bookID=buycar.book_detail_id and upload.id=detail.book_upload_id
+  </select>
+  <select id="selectBuycarBook" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    select *
+    from book_buycar as buycar,book_detail as detail,book_upload as upload
+    where buycar.user_id = ${userId} and book_detail_id = ${bookid} and status='1' and detail.bookID=buycar.book_detail_id and upload.id=detail.book_upload_id
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from book_buycar
+    where buycar_id = #{buycarId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from book_buycar
+    where buycar_id = #{buycarId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.engineering.bookpurchase.buycar.pojo.BookBuycarExample" >
+    delete from book_buycar
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.engineering.bookpurchase.buycar.pojo.BookBuycar" >
+    insert into book_buycar (buycar_id, user_id, book_detail_id, 
+      order_quantity, total_price, create_date, 
+      updata_date, remarks, status
+      )
+    values (#{buycarId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{bookDetailId,jdbcType=INTEGER}, 
+      #{orderQuantity,jdbcType=VARCHAR}, #{totalPrice,jdbcType=VARCHAR}, #{createDate,jdbcType=VARCHAR}, 
+      #{updataDate,jdbcType=VARCHAR}, #{remarks,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.engineering.bookpurchase.buycar.pojo.BookBuycar" >
+    insert into book_buycar
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="buycarId != null" >
+        buycar_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="bookDetailId != null" >
+        book_detail_id,
+      </if>
+      <if test="orderQuantity != null" >
+        order_quantity,
+      </if>
+      <if test="totalPrice != null" >
+        total_price,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="updataDate != null" >
+        updata_date,
+      </if>
+      <if test="remarks != null" >
+        remarks,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="buycarId != null" >
+        #{buycarId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="bookDetailId != null" >
+        #{bookDetailId,jdbcType=INTEGER},
+      </if>
+      <if test="orderQuantity != null" >
+        #{orderQuantity,jdbcType=VARCHAR},
+      </if>
+      <if test="totalPrice != null" >
+        #{totalPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=VARCHAR},
+      </if>
+      <if test="updataDate != null" >
+        #{updataDate,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null" >
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.engineering.bookpurchase.buycar.pojo.BookBuycarExample" resultType="java.lang.Integer" >
+    select count(*) from book_buycar
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update book_buycar
+    <set >
+      <if test="record.buycarId != null" >
+        buycar_id = #{record.buycarId,jdbcType=INTEGER},
+      </if>
+      <if test="record.userId != null" >
+        user_id = #{record.userId,jdbcType=INTEGER},
+      </if>
+      <if test="record.bookDetailId != null" >
+        book_detail_id = #{record.bookDetailId,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderQuantity != null" >
+        order_quantity = #{record.orderQuantity,jdbcType=VARCHAR},
+      </if>
+      <if test="record.totalPrice != null" >
+        total_price = #{record.totalPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createDate != null" >
+        create_date = #{record.createDate,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updataDate != null" >
+        updata_date = #{record.updataDate,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remarks != null" >
+        remarks = #{record.remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update book_buycar
+    set buycar_id = #{record.buycarId,jdbcType=INTEGER},
+      user_id = #{record.userId,jdbcType=INTEGER},
+      book_detail_id = #{record.bookDetailId,jdbcType=INTEGER},
+      order_quantity = #{record.orderQuantity,jdbcType=VARCHAR},
+      total_price = #{record.totalPrice,jdbcType=VARCHAR},
+      create_date = #{record.createDate,jdbcType=VARCHAR},
+      updata_date = #{record.updataDate,jdbcType=VARCHAR},
+      remarks = #{record.remarks,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.engineering.bookpurchase.buycar.pojo.BookBuycar" >
+    update book_buycar
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="bookDetailId != null" >
+        book_detail_id = #{bookDetailId,jdbcType=INTEGER},
+      </if>
+      <if test="orderQuantity != null" >
+        order_quantity = #{orderQuantity,jdbcType=VARCHAR},
+      </if>
+      <if test="totalPrice != null" >
+        total_price = #{totalPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=VARCHAR},
+      </if>
+      <if test="updataDate != null" >
+        updata_date = #{updataDate,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null" >
+        remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where buycar_id = #{buycarId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.engineering.bookpurchase.buycar.pojo.BookBuycar" >
+    update book_buycar
+    set user_id = #{userId,jdbcType=INTEGER},
+      book_detail_id = #{bookDetailId,jdbcType=INTEGER},
+      order_quantity = #{orderQuantity,jdbcType=VARCHAR},
+      total_price = #{totalPrice,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=VARCHAR},
+      updata_date = #{updataDate,jdbcType=VARCHAR},
+      remarks = #{remarks,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR}
+    where buycar_id = #{buycarId,jdbcType=INTEGER}
+  </update>
+  <update id="updateBuycarStatue" parameterType="com.engineering.bookpurchase.buycar.pojo.BookBuycar">
+    update book_buycar
+    set
+    status = '2'
+    where buycar_id = #{buycarId,jdbcType=INTEGER}
+  </update>
+
+</mapper>

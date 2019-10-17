@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.engineering.bookpurchase.detail.mapper.BookDetailMapper" >
+  <resultMap id="BaseResultMap" type="com.engineering.bookpurchase.detail.pojo.BookDetail" >
+    <id column="bookID" property="bookid" jdbcType="INTEGER" />
+    <result column="bookName" property="bookname" jdbcType="VARCHAR" />
+    <result column="author" property="author" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="VARCHAR" />
+    <result column="discount" property="discount" jdbcType="VARCHAR" />
+    <result column="bookTypeID" property="booktypeid" jdbcType="VARCHAR" />
+    <result column="book_upload_id" property="bookuploadid" jdbcType="VARCHAR" />
+    <association property="bookType" javaType="com.engineering.bookpurchase.type.pojo.BookType">
+      <id column="typeID" property="typeid" jdbcType="INTEGER" />
+      <result column="typeName" property="typename" jdbcType="VARCHAR" />
+      <result column="create_data" property="createData" jdbcType="VARCHAR" />
+      <result column="updata_data" property="updataData" jdbcType="VARCHAR" />
+      <result column="remarks" property="remarks" jdbcType="VARCHAR" />
+    </association>
+    <association property="bookUpload" javaType="com.engineering.bookpurchase.common.pojo.BookUpload">
+      <id column="id" property="id" jdbcType="INTEGER" />
+      <result column="original_filename" property="originalFilename" jdbcType="VARCHAR" />
+      <result column="original_name" property="originalName" jdbcType="VARCHAR" />
+      <result column="prefix" property="prefix" jdbcType="VARCHAR" />
+      <result column="rename_filename" property="renameFilename" jdbcType="VARCHAR" />
+      <result column="rename_name" property="renameName" jdbcType="VARCHAR" />
+      <result column="file_path" property="filePath" jdbcType="VARCHAR" />
+      <result column="create_data" property="createData" jdbcType="VARCHAR" />
+      <result column="update_data" property="updateData" jdbcType="VARCHAR" />
+      <result column="remarks" property="remarks" jdbcType="VARCHAR" />
+      <result column="relative_path" property="relativePath" jdbcType="VARCHAR" />
+    </association>
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    bookID, bookName, author, content, price, discount, bookTypeID,book_upload_id
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.engineering.bookpurchase.detail.pojo.BookDetailExample" >
+   <!-- select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from book_detail
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>-->
+    select * from book_detail as detail,book_type as type2,book_upload as upload
+    where
+    detail.bookTypeID=type2.typeID
+    and
+    detail.book_upload_id=upload.id limit #{limit},#{page}
+  </select>
+  <select id="selectDetailCount" resultType="java.lang.Integer">
+    select count(*) from book_detail
+  </select>
+  <select id="searchByBook" parameterType="java.lang.String" resultType="com.engineering.bookpurchase.detail.pojo.BookDetail" resultMap="BaseResultMap">
+    select * from book_detail as detail,book_type as type2
+    where detail.bookTypeID=type2.typeID
+    <if test="bookname!=null and bookname!=''">
+      and detail.bookName like CONCAT(CONCAT('%', #{bookname}), '%')
+    </if>
+    <if test="author!=null and author!=''">
+      and detail.author like CONCAT(CONCAT('%', #{author}), '%')
+    </if>
+  </select>
+  <select id="searchByBookCount" resultType="java.lang.Integer">
+    select count(*) from book_detail as detail,book_type as type2
+    where detail.bookTypeID=type2.typeID
+    <if test="bookname!=null and bookname!=''">
+      and detail.bookName like CONCAT(CONCAT('%', #{bookname}), '%')
+    </if>
+    <if test="author!=null and author!=''">
+      and detail.author like CONCAT(CONCAT('%', #{author}), '%')
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from book_detail
+    where bookID = #{bookid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from book_detail
+    where bookID = #{bookid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.engineering.bookpurchase.detail.pojo.BookDetailExample" >
+    delete from book_detail
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <delete id="deleteSelectByPrimaryKey" parameterType="java.util.List">
+    delete from book_detail
+    where 1>2 or bookID in
+    <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </delete>
+  <insert id="insert" parameterType="com.engineering.bookpurchase.detail.pojo.BookDetail" >
+    insert into book_detail (bookID, bookName, author, 
+      content, price, discount, 
+      bookTypeID,book_upload_id)
+    values (#{bookid,jdbcType=INTEGER}, #{bookname,jdbcType=VARCHAR}, #{author,jdbcType=VARCHAR}, 
+      #{content,jdbcType=VARCHAR}, #{price,jdbcType=VARCHAR}, #{discount,jdbcType=VARCHAR}, 
+      #{booktypeid,jdbcType=VARCHAR},#{bookuploadid,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.engineering.bookpurchase.detail.pojo.BookDetail" >
+    insert into book_detail
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="bookid != null" >
+        bookID,
+      </if>
+      <if test="bookname != null" >
+        bookName,
+      </if>
+      <if test="author != null" >
+        author,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+      <if test="discount != null" >
+        discount,
+      </if>
+      <if test="booktypeid != null" >
+        bookTypeID,
+      </if>
+      <if test="bookuploadid != null" >
+        book_upload_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="bookid != null" >
+        #{bookid,jdbcType=INTEGER},
+      </if>
+      <if test="bookname != null" >
+        #{bookname,jdbcType=VARCHAR},
+      </if>
+      <if test="author != null" >
+        #{author,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=VARCHAR},
+      </if>
+      <if test="discount != null" >
+        #{discount,jdbcType=VARCHAR},
+      </if>
+      <if test="booktypeid != null" >
+        #{booktypeid,jdbcType=VARCHAR},
+      </if>
+      <if test="bookuploadid != null" >
+        #{bookuploadid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.engineering.bookpurchase.detail.pojo.BookDetailExample" resultType="java.lang.Integer" >
+    select count(*) from book_detail
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update book_detail
+    <set >
+      <if test="record.bookid != null" >
+        bookID = #{record.bookid,jdbcType=INTEGER},
+      </if>
+      <if test="record.bookname != null" >
+        bookName = #{record.bookname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.author != null" >
+        author = #{record.author,jdbcType=VARCHAR},
+      </if>
+      <if test="record.content != null" >
+        content = #{record.content,jdbcType=VARCHAR},
+      </if>
+      <if test="record.price != null" >
+        price = #{record.price,jdbcType=VARCHAR},
+      </if>
+      <if test="record.discount != null" >
+        discount = #{record.discount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.booktypeid != null" >
+        bookTypeID = #{record.booktypeid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update book_detail
+    set bookID = #{record.bookid,jdbcType=INTEGER},
+      bookName = #{record.bookname,jdbcType=VARCHAR},
+      author = #{record.author,jdbcType=VARCHAR},
+      content = #{record.content,jdbcType=VARCHAR},
+      price = #{record.price,jdbcType=VARCHAR},
+      discount = #{record.discount,jdbcType=VARCHAR},
+      bookTypeID = #{record.booktypeid,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.engineering.bookpurchase.detail.pojo.BookDetail" >
+    update book_detail
+    <set >
+      <if test="bookname != null" >
+        bookName = #{bookname,jdbcType=VARCHAR},
+      </if>
+      <if test="author != null" >
+        author = #{author,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        price = #{price,jdbcType=VARCHAR},
+      </if>
+      <if test="discount != null" >
+        discount = #{discount,jdbcType=VARCHAR},
+      </if>
+      <if test="booktypeid != null" >
+        bookTypeID = #{booktypeid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where bookID = #{bookid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.engineering.bookpurchase.detail.pojo.BookDetail" >
+    update book_detail
+    set bookName = #{bookname,jdbcType=VARCHAR},
+      author = #{author,jdbcType=VARCHAR},
+      content = #{content,jdbcType=VARCHAR},
+      price = #{price,jdbcType=VARCHAR},
+      discount = #{discount,jdbcType=VARCHAR},
+      bookTypeID = #{booktypeid,jdbcType=VARCHAR}
+    where bookID = #{bookid,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectAllBook" resultMap="BaseResultMap">
+    /*select * from book_detail*/
+    select * from book_detail as detail,book_type as type2,book_upload as upload
+    where
+    detail.bookTypeID=type2.typeID
+    and
+    detail.book_upload_id=upload.id
+  </select>
+
+  <select id="selectDetailByBookId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select * from book_detail as detail,book_type as type2,book_upload as upload
+    where
+    detail.bookTypeID = type2.typeID
+    and
+    detail.book_upload_id = upload.id
+    and
+    detail.bookid = #{bookid,jdbcType=INTEGER}
+  </select>
+
+  <select id="searchByBookName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select * from book_detail as detail,book_type as type2,book_upload as upload
+    where
+    detail.bookTypeID = type2.typeID
+    and
+    detail.book_upload_id = upload.id
+    and
+    detail.bookName like CONCAT(CONCAT('%', #{bookname}), '%')
+  </select>
+</mapper>

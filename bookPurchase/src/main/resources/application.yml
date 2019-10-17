@@ -1,0 +1,4 @@
+spring:
+  profiles:
+    #开发模式
+    active: dev

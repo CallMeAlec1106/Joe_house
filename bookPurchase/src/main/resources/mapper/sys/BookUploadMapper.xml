@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.engineering.bookpurchase.common.mapper.BookUploadMapper" >
+  <resultMap id="BaseResultMap" type="com.engineering.bookpurchase.common.pojo.BookUpload" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="original_filename" property="originalFilename" jdbcType="VARCHAR" />
+    <result column="original_name" property="originalName" jdbcType="VARCHAR" />
+    <result column="prefix" property="prefix" jdbcType="VARCHAR" />
+    <result column="rename_filename" property="renameFilename" jdbcType="VARCHAR" />
+    <result column="rename_name" property="renameName" jdbcType="VARCHAR" />
+    <result column="file_path" property="filePath" jdbcType="VARCHAR" />
+    <result column="create_data" property="createData" jdbcType="VARCHAR" />
+    <result column="update_data" property="updateData" jdbcType="VARCHAR" />
+    <result column="remarks" property="remarks" jdbcType="VARCHAR" />
+    <result column="relative_path" property="relativePath" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, original_filename, original_name, prefix, rename_filename, rename_name, file_path, 
+    create_data, update_data, remarks,relative_path
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.engineering.bookpurchase.common.pojo.BookUploadExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from book_upload
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from book_upload
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from book_upload
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.engineering.bookpurchase.common.pojo.BookUploadExample" >
+    delete from book_upload
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.engineering.bookpurchase.common.pojo.BookUpload" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+    insert into book_upload
+      (
+        id, original_filename, original_name,
+        prefix, rename_filename, rename_name,
+        file_path, create_data, update_data,
+        remarks,relative_path
+      )
+    values
+      (
+        #{id,jdbcType=INTEGER}, #{originalFilename,jdbcType=VARCHAR}, #{originalName,jdbcType=VARCHAR},
+        #{prefix,jdbcType=VARCHAR}, #{renameFilename,jdbcType=VARCHAR}, #{renameName,jdbcType=VARCHAR},
+        #{filePath,jdbcType=VARCHAR}, #{createData,jdbcType=VARCHAR}, #{updateData,jdbcType=VARCHAR},
+        #{remarks,jdbcType=VARCHAR},#{relativePath,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.engineering.bookpurchase.common.pojo.BookUpload" >
+    insert into book_upload
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="originalFilename != null" >
+        original_filename,
+      </if>
+      <if test="originalName != null" >
+        original_name,
+      </if>
+      <if test="prefix != null" >
+        prefix,
+      </if>
+      <if test="renameFilename != null" >
+        rename_filename,
+      </if>
+      <if test="renameName != null" >
+        rename_name,
+      </if>
+      <if test="filePath != null" >
+        file_path,
+      </if>
+      <if test="createData != null" >
+        create_data,
+      </if>
+      <if test="updateData != null" >
+        update_data,
+      </if>
+      <if test="remarks != null" >
+        remarks,
+      </if>
+      <if test="relative_path != null" >
+        relative_path,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="originalFilename != null" >
+        #{originalFilename,jdbcType=VARCHAR},
+      </if>
+      <if test="originalName != null" >
+        #{originalName,jdbcType=VARCHAR},
+      </if>
+      <if test="prefix != null" >
+        #{prefix,jdbcType=VARCHAR},
+      </if>
+      <if test="renameFilename != null" >
+        #{renameFilename,jdbcType=VARCHAR},
+      </if>
+      <if test="renameName != null" >
+        #{renameName,jdbcType=VARCHAR},
+      </if>
+      <if test="filePath != null" >
+        #{filePath,jdbcType=VARCHAR},
+      </if>
+      <if test="createData != null" >
+        #{createData,jdbcType=VARCHAR},
+      </if>
+      <if test="updateData != null" >
+        #{updateData,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null" >
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.engineering.bookpurchase.common.pojo.BookUploadExample" resultType="java.lang.Integer" >
+    select count(*) from book_upload
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update book_upload
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.originalFilename != null" >
+        original_filename = #{record.originalFilename,jdbcType=VARCHAR},
+      </if>
+      <if test="record.originalName != null" >
+        original_name = #{record.originalName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.prefix != null" >
+        prefix = #{record.prefix,jdbcType=VARCHAR},
+      </if>
+      <if test="record.renameFilename != null" >
+        rename_filename = #{record.renameFilename,jdbcType=VARCHAR},
+      </if>
+      <if test="record.renameName != null" >
+        rename_name = #{record.renameName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.filePath != null" >
+        file_path = #{record.filePath,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createData != null" >
+        create_data = #{record.createData,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateData != null" >
+        update_data = #{record.updateData,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remarks != null" >
+        remarks = #{record.remarks,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update book_upload
+    set id = #{record.id,jdbcType=INTEGER},
+      original_filename = #{record.originalFilename,jdbcType=VARCHAR},
+      original_name = #{record.originalName,jdbcType=VARCHAR},
+      prefix = #{record.prefix,jdbcType=VARCHAR},
+      rename_filename = #{record.renameFilename,jdbcType=VARCHAR},
+      rename_name = #{record.renameName,jdbcType=VARCHAR},
+      file_path = #{record.filePath,jdbcType=VARCHAR},
+      create_data = #{record.createData,jdbcType=VARCHAR},
+      update_data = #{record.updateData,jdbcType=VARCHAR},
+      remarks = #{record.remarks,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.engineering.bookpurchase.common.pojo.BookUpload" >
+    update book_upload
+    <set >
+      <if test="originalFilename != null" >
+        original_filename = #{originalFilename,jdbcType=VARCHAR},
+      </if>
+      <if test="originalName != null" >
+        original_name = #{originalName,jdbcType=VARCHAR},
+      </if>
+      <if test="prefix != null" >
+        prefix = #{prefix,jdbcType=VARCHAR},
+      </if>
+      <if test="renameFilename != null" >
+        rename_filename = #{renameFilename,jdbcType=VARCHAR},
+      </if>
+      <if test="renameName != null" >
+        rename_name = #{renameName,jdbcType=VARCHAR},
+      </if>
+      <if test="filePath != null" >
+        file_path = #{filePath,jdbcType=VARCHAR},
+      </if>
+      <if test="createData != null" >
+        create_data = #{createData,jdbcType=VARCHAR},
+      </if>
+      <if test="updateData != null" >
+        update_data = #{updateData,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null" >
+        remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.engineering.bookpurchase.common.pojo.BookUpload" >
+    update book_upload
+    set original_filename = #{originalFilename,jdbcType=VARCHAR},
+      original_name = #{originalName,jdbcType=VARCHAR},
+      prefix = #{prefix,jdbcType=VARCHAR},
+      rename_filename = #{renameFilename,jdbcType=VARCHAR},
+      rename_name = #{renameName,jdbcType=VARCHAR},
+      file_path = #{filePath,jdbcType=VARCHAR},
+      create_data = #{createData,jdbcType=VARCHAR},
+      update_data = #{updateData,jdbcType=VARCHAR},
+      remarks = #{remarks,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.engineering.bookpurchase.front.mapper.FrontMapper">
+  <resultMap id="BaseResultMap" type="com.engineering.bookpurchase.front.pojo.User">
+    <id column="consumerid" jdbcType="INTEGER" property="consumerid" />
+      <result column="truename" jdbcType="VARCHAR" property="truename" />
+      <result column="username" jdbcType="VARCHAR" property="username" />
+      <result column="password" jdbcType="VARCHAR" property="password" />
+      <result column="sex" jdbcType="VARCHAR" property="sex" />
+      <result column="birthday" jdbcType="VARCHAR" property="birthday" />
+      <result column="address" jdbcType="VARCHAR" property="address" />
+      <result column="email" jdbcType="VARCHAR" property="email" />
+      <result column="phone" jdbcType="VARCHAR" property="phone" />
+  </resultMap>
+
+  <select id="LoginUser" parameterType="String" resultType="com.engineering.bookpurchase.front.pojo.User">
+    select * from book_user
+    where
+    username = '${username}' and password = '${password}'
+  </select>
+
+  <insert id="registerUser" parameterType="com.engineering.bookpurchase.front.pojo.User" useGeneratedKeys="true"  keyProperty="consumerid">
+    insert into book_user
+    (consumerid,truename,username,password,sex,email)
+    values
+    (#{consumerid},#{truename},#{username},#{password},#{sex},#{email})
+  </insert>
+
+</mapper>

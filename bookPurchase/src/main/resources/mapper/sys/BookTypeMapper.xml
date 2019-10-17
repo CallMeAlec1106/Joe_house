@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.engineering.bookpurchase.type.mapper.BookTypeMapper" >
+  <resultMap id="BaseResultMap" type="com.engineering.bookpurchase.type.pojo.BookType" >
+    <id column="typeID" property="typeid" jdbcType="INTEGER" />
+    <result column="typeName" property="typename" jdbcType="VARCHAR" />
+    <result column="create_data" property="createData" jdbcType="VARCHAR" />
+    <result column="updata_data" property="updataData" jdbcType="VARCHAR" />
+    <result column="remarks" property="remarks" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    typeID, typeName, create_data, updata_data, remarks
+  </sql>
+  <select id="selectType" resultMap="BaseResultMap" parameterType="com.engineering.bookpurchase.type.pojo.BookTypeExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from book_type
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.engineering.bookpurchase.type.pojo.BookTypeExample" >
+    <!--select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from book_type
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>-->
+    select * from book_type limit #{limit},#{page}
+  </select>
+  <select id="selectTypeCount" resultType="java.lang.Integer">
+    select count(*) from book_type
+  </select>
+  <select id="searchByType" parameterType="java.lang.String" resultType="com.engineering.bookpurchase.type.pojo.BookType">
+    select * from book_type
+    where
+    typeName like CONCAT(CONCAT('%', #{booktype}), '%');
+  </select>
+  <select id="searchByTypeCount" resultType="java.lang.Integer">
+    select count(*) from book_type
+    where
+    typeName like CONCAT(CONCAT('%', #{booktype}), '%');
+  </select>
+
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from book_type
+    where typeID = #{typeid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from book_type
+    where typeID = #{typeid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.engineering.bookpurchase.type.pojo.BookTypeExample" >
+    delete from book_type
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <delete id="deleteSelectByPrimaryKey" parameterType="java.util.List">
+    delete from book_type
+    where 1>2 or typeID in
+    <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </delete>
+  <insert id="insert" parameterType="com.engineering.bookpurchase.type.pojo.BookType" >
+    insert into book_type (typeID, typeName, create_data, 
+      updata_data, remarks)
+    values (#{typeid,jdbcType=INTEGER}, #{typename,jdbcType=VARCHAR}, #{createData,jdbcType=VARCHAR}, 
+      #{updataData,jdbcType=VARCHAR}, #{remarks,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.engineering.bookpurchase.type.pojo.BookType" >
+    insert into book_type
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="typeid != null" >
+        typeID,
+      </if>
+      <if test="typename != null" >
+        typeName,
+      </if>
+      <if test="createData != null" >
+        create_data,
+      </if>
+      <if test="updataData != null" >
+        updata_data,
+      </if>
+      <if test="remarks != null" >
+        remarks,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="typeid != null" >
+        #{typeid,jdbcType=INTEGER},
+      </if>
+      <if test="typename != null" >
+        #{typename,jdbcType=VARCHAR},
+      </if>
+      <if test="createData != null" >
+        #{createData,jdbcType=VARCHAR},
+      </if>
+      <if test="updataData != null" >
+        #{updataData,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null" >
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.engineering.bookpurchase.type.pojo.BookTypeExample" resultType="java.lang.Integer" >
+    select count(*) from book_type
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update book_type
+    <set >
+      <if test="record.typeid != null" >
+        typeID = #{record.typeid,jdbcType=INTEGER},
+      </if>
+      <if test="record.typename != null" >
+        typeName = #{record.typename,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createData != null" >
+        create_data = #{record.createData,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updataData != null" >
+        updata_data = #{record.updataData,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remarks != null" >
+        remarks = #{record.remarks,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update book_type
+    set typeID = #{record.typeid,jdbcType=INTEGER},
+      typeName = #{record.typename,jdbcType=VARCHAR},
+      create_data = #{record.createData,jdbcType=VARCHAR},
+      updata_data = #{record.updataData,jdbcType=VARCHAR},
+      remarks = #{record.remarks,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.engineering.bookpurchase.type.pojo.BookType" >
+    update book_type
+    <set >
+      <if test="typename != null" >
+        typeName = #{typename,jdbcType=VARCHAR},
+      </if>
+      <if test="updataData != null" >
+        updata_data = #{updataData,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null" >
+        remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where typeID = #{typeid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.engineering.bookpurchase.type.pojo.BookType" >
+    update book_type
+    set typeName = #{typename,jdbcType=VARCHAR},
+      create_data = #{createData,jdbcType=VARCHAR},
+      updata_data = #{updataData,jdbcType=VARCHAR},
+      remarks = #{remarks,jdbcType=VARCHAR}
+    where typeID = #{typeid,jdbcType=INTEGER}
+  </update>
+</mapper>
